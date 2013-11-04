@@ -16,6 +16,7 @@ public class Game extends BasicGame{
 	
 	Map map;
 	Enemy e;
+	
 
 	public Game(String title) 
 	{
@@ -34,6 +35,7 @@ public class Game extends BasicGame{
 		}
 		
 		e.render(g);
+		
 	}
 
 	public void init(GameContainer gc) throws SlickException 
@@ -58,6 +60,8 @@ public class Game extends BasicGame{
 	public void update(GameContainer gc, int delta) throws SlickException 
 	{
 		e.update(delta);
+		
+		
 	}
 	
 	public static void main(String[] args)
@@ -71,6 +75,18 @@ public class Game extends BasicGame{
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/*
+	 * Static helper method to detect collision between circles.
+	 */
+	public static boolean circlesCollide(float x1, float y1, float r1, float x2, float y2, float r2)
+	{
+		float dx = x1 - x2;
+		float dy = y1 - y2;
+		float dist = (float)Math.sqrt(dx*dx + dy*dy); //lack of precision shouldn't be a problem here, but keep it in mind for later
+		if(dist <= r1 + r2) return true;
+		return false;
 	}
 
 }

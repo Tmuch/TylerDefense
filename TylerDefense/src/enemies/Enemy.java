@@ -65,6 +65,12 @@ public class Enemy {
 			
 		} else {
 			
+			
+			/*
+			 * GET RID OF THIS SHIT.
+			 * 		Just use a simple collision detection. Check if enemy is within 1 of the waypoint. 
+			 */
+				
 			boolean s = false;
 			switch(dx)
 			{
