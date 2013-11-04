@@ -30,7 +30,7 @@ public class Game extends BasicGame{
 		Waypoint w = map.getInitWaypoint();
 		while(!(w == null))
 		{
-			g.fillRect(w.getX() - 1, w.getY() - 1, 3, 3);
+			g.fillOval(w.getX() - 1.5f, w.getY() - 1.5f, 3, 3);
 			w = w.getNext();
 		}
 		
@@ -60,7 +60,6 @@ public class Game extends BasicGame{
 	public void update(GameContainer gc, int delta) throws SlickException 
 	{
 		e.update(delta);
-		
 		
 	}
 	

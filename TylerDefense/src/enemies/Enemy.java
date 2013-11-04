@@ -1,5 +1,6 @@
 package enemies;
 
+import main.Game;
 import map.Waypoint;
 
 import org.newdawn.slick.Graphics;
@@ -10,14 +11,14 @@ public class Enemy {
 	private float width, height;
 	private Waypoint targetWaypoint;
 	private boolean switchedWaypoints;
-	private int dx, dy;
+	private float dx, dy;
 	private float speed;
 	
 	public Enemy(int x, int y, Waypoint first)
 	{
 		this.x = x;
 		this.y = y;
-		width = height = 6;
+		width = height = 10;
 		switchedWaypoints = true;
 		targetWaypoint = first;
 		speed = 100;
@@ -25,7 +26,7 @@ public class Enemy {
 	
 	public void render(Graphics g)
 	{
-		g.drawRect(x - width/2, y - height/2, width, height);
+		g.drawOval(x - width/2, y - height/2, width, height);
 	}
 	
 	public void update(int delta)
@@ -40,67 +41,20 @@ public class Enemy {
 				float diffX, diffY;
 				diffX = targetWaypoint.getX() - this.x;
 				diffY = targetWaypoint.getY() - this.y;
-				/*float magnitude = (float)Math.sqrt(diffX*diffX + diffY*diffY);
+				float magnitude = (float)Math.sqrt(diffX*diffX + diffY*diffY);
 				dx = diffX / magnitude;
 				dy = diffY / magnitude;
-				System.out.println("dx: " + dx + ", dy: " + dy);
-				*/
-				
-				dx = dy = 0;
-				
-				if(diffX > 0) {
-					dx = 1;
-				} else if(diffX < 0) {
-					dx = -1;
-				} else dx = 0;
-				
-				if(diffY > 0) {
-					dy = 1;
-				} else if(diffY < 0) {
-					dy = -1;
-				} else dy = 0;
+				//System.out.println("dx: " + dx + ", dy: " + dy);
 				
 				switchedWaypoints = false;
 			}
 			
-		} else {
+		} else {	
 			
-			
-			/*
-			 * GET RID OF THIS SHIT.
-			 * 		Just use a simple collision detection. Check if enemy is within 1 of the waypoint. 
-			 */
-				
-			boolean s = false;
-			switch(dx)
+			if(Game.circlesCollide(this.x, this.y, 1, this.targetWaypoint.getX(), this.targetWaypoint.getY(), 1))
 			{
-			case 1:
-				if(this.x >= targetWaypoint.getX()) s = true;
-				break;
-			case -1:
-				if(this.x <= targetWaypoint.getX()) s = true;
-				break;
-			}
-			
-			if(!s)
-			{
-				switch(dy)
-				{
-				case 1:
-					if(this.y >= targetWaypoint.getY()) s = true;
-					break;
-				case -1:
-					if(this.y <= targetWaypoint.getY()) s = true;
-					break;
-				}
-			}
-			
-			if(s)
-			{
-				this.x = targetWaypoint.getX();
-				this.y = targetWaypoint.getY();
-				targetWaypoint = targetWaypoint.getNext();
 				switchedWaypoints = true;
+				this.targetWaypoint = this.targetWaypoint.getNext();
 				return;
 			}
 			
