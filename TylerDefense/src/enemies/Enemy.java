@@ -5,28 +5,38 @@ import map.Waypoint;
 
 import org.newdawn.slick.Graphics;
 
+import towers.Tower;
+
 public class Enemy {
 	
 	private float x, y;
-	private float width, height;
+	private float radius;
 	private Waypoint targetWaypoint;
 	private boolean switchedWaypoints;
 	private float dx, dy;
 	private float speed;
 	
-	public Enemy(int x, int y, Waypoint first)
+	private int health;
+	public Game game;
+	
+	Tower attacker;
+	
+	private int id;
+	
+	public Enemy(int x, int y, Waypoint first, Game g)
 	{
 		this.x = x;
 		this.y = y;
-		width = height = 10;
+		radius = 5;
 		switchedWaypoints = true;
 		targetWaypoint = first;
 		speed = 100;
+		game = g;
 	}
 	
 	public void render(Graphics g)
 	{
-		g.drawOval(x - width/2, y - height/2, width, height);
+		g.drawOval(x - radius, y - radius, radius*2, radius*2);
 	}
 	
 	public void update(int delta)
@@ -60,8 +70,45 @@ public class Enemy {
 			
 			this.x += dx * speed * (delta/1000.0);
 			this.y += dy * speed * (delta/1000.0);
+			
+			/* TODO: SIGNAL TOWER IF WE HAVE MOVED OUT OF RANGE */
 		}
 	}
 	
+	public void doDamage(int damage)
+	{
+		health -= damage;
+		if(health <= 0)
+		{
+			//dead
+			attacker.enemyHasDied(this); //signal tower to re-target
+			this.destroy();
+		}
+	}
+	
+	public void destroy()
+	{
+		game.removeEnemy(this);
+	}
+	
+	public int getID()
+	{
+		return id;
+	}
+	
+	public float getX()
+	{
+		return x;
+	}
+	
+	public float getY()
+	{
+		return y;
+	}
+	
+	public float getRadius()
+	{
+		return radius;
+	}
 
 }

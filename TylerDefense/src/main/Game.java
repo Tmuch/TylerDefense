@@ -1,11 +1,14 @@
 package main;
 
+import java.util.ArrayList;
+
 import map.*;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 
+import towers.Tower;
 import enemies.Enemy;
 
 public class Game extends BasicGame{
@@ -17,6 +20,8 @@ public class Game extends BasicGame{
 	Map map;
 	Enemy e;
 	
+	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	Tower tower;
 
 	public Game(String title) 
 	{
@@ -35,6 +40,7 @@ public class Game extends BasicGame{
 		}
 		
 		e.render(g);
+		tower.debugRender(g);
 		
 	}
 
@@ -47,7 +53,9 @@ public class Game extends BasicGame{
 		//gc.setMaximumLogicUpdateInterval(20); //set a maximum?
 		
 		map = new Map();
-		e = new Enemy(100, 0, map.getInitWaypoint());
+		e = new Enemy(0, 400, map.getInitWaypoint(), this);
+		enemies.add(e);
+		tower = new Tower(this, 400, 400);
 	}
 
 	/*
@@ -60,6 +68,7 @@ public class Game extends BasicGame{
 	public void update(GameContainer gc, int delta) throws SlickException 
 	{
 		e.update(delta);
+		tower.shoot(delta);
 		
 	}
 	
@@ -76,6 +85,8 @@ public class Game extends BasicGame{
 		}
 	}
 	
+	
+	
 	/*
 	 * Static helper method to detect collision between circles.
 	 * 
@@ -87,6 +98,34 @@ public class Game extends BasicGame{
 		float dist = (float)Math.sqrt(dx*dx + dy*dy); //lack of precision shouldn't be a problem here, but keep it in mind for later
 		if(dist <= r1 + r2) return true;
 		return false;
+	}
+	
+	private static boolean enemyInRange(Tower t, Enemy e)
+	{
+		return circlesCollide(t.x, t.y, t.radius, e.getX(), e.getY(), e.getRadius());
+	}
+	
+	
+	/*
+	 * Loop through the array of enemies (from lowest index to highest)
+	 * 		This should give me the enemy that is farthest along the path. 
+	 */
+	public Enemy getNextTarget(Tower t)
+	{
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			if(enemyInRange(t, enemies.get(i)))
+			{
+				return enemies.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public void removeEnemy(Enemy e)
+	{
+		enemies.remove(e);
 	}
 
 }
