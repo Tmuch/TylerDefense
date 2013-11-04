@@ -2,7 +2,7 @@ package map;
 
 public class Waypoint {
 	
-	private int x, y;
+	private float x, y;
 	private Waypoint nextWaypoint;
 	private boolean last;
 	
@@ -25,12 +25,12 @@ public class Waypoint {
 		return nextWaypoint;
 	}
 	
-	public int getX()
+	public float getX()
 	{
 		return x;
 	}
 	
-	public int gety()
+	public float getY()
 	{
 		return y;
 	}

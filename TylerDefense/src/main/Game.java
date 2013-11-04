@@ -1,9 +1,12 @@
 package main;
 
 import map.*;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
+
+import enemies.Enemy;
 
 public class Game extends BasicGame{
 	private final int UPS = 60; //updates per second
@@ -12,6 +15,7 @@ public class Game extends BasicGame{
 	String text = "";
 	
 	Map map;
+	Enemy e;
 
 	public Game(String title) 
 	{
@@ -25,9 +29,11 @@ public class Game extends BasicGame{
 		Waypoint w = map.getInitWaypoint();
 		while(!(w == null))
 		{
-			g.fillRect(w.getX(), w.gety(), 3, 3);
+			g.fillRect(w.getX() - 1, w.getY() - 1, 3, 3);
 			w = w.getNext();
 		}
+		
+		e.render(g);
 	}
 
 	public void init(GameContainer gc) throws SlickException 
@@ -39,7 +45,7 @@ public class Game extends BasicGame{
 		//gc.setMaximumLogicUpdateInterval(20); //set a maximum?
 		
 		map = new Map();
-		
+		e = new Enemy(100, 0, map.getInitWaypoint());
 	}
 
 	/*
@@ -51,7 +57,7 @@ public class Game extends BasicGame{
 	 */
 	public void update(GameContainer gc, int delta) throws SlickException 
 	{
-		
+		e.update(delta);
 	}
 	
 	public static void main(String[] args)
