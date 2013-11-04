@@ -79,6 +79,7 @@ public class Game extends BasicGame{
 	
 	/*
 	 * Static helper method to detect collision between circles.
+	 * 
 	 */
 	public static boolean circlesCollide(float x1, float y1, float r1, float x2, float y2, float r2)
 	{
