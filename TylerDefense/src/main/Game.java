@@ -1,27 +1,33 @@
 package main;
 
+import map.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.*;
 
 public class Game extends BasicGame{
-	
-	private int updateCounter;
 	private final int UPS = 60; //updates per second
 	private final int MS_PER_UPDATE = (int)Math.ceil(1000D / UPS);
 	
 	String text = "";
+	
+	Map map;
 
 	public Game(String title) 
 	{
 		super(title);
-		
-		updateCounter = 0;
 	}
 
 	public void render(GameContainer gc, Graphics g) throws SlickException 
 	{
 		g.drawString(text, gc.getWidth()/2 - g.getFont().getWidth(text)/2, gc.getHeight()/2 - g.getFont().getHeight(text)/2);
+		
+		Waypoint w = map.getInitWaypoint();
+		while(!(w == null))
+		{
+			g.fillRect(w.getX(), w.gety(), 3, 3);
+			w = w.getNext();
+		}
 	}
 
 	public void init(GameContainer gc) throws SlickException 
@@ -31,6 +37,9 @@ public class Game extends BasicGame{
 		//don't mess with this stuff quite yet
 		//gc.setMinimumLogicUpdateInterval(20); //maximum 50 updates per second
 		//gc.setMaximumLogicUpdateInterval(20); //set a maximum?
+		
+		map = new Map();
+		
 	}
 
 	/*
@@ -42,10 +51,7 @@ public class Game extends BasicGame{
 	 */
 	public void update(GameContainer gc, int delta) throws SlickException 
 	{
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
-		{
-			text = text + "penis";
-		}
+		
 	}
 	
 	public static void main(String[] args)
