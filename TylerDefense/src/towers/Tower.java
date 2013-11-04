@@ -60,10 +60,17 @@ public class Tower {
 		}
 	}
 	
+	public void enemyOutOfRange(Enemy e)
+	{
+		System.out.println("signaled");
+		enemyHasDied(e);
+	}
+	
 	private void retarget()
 	{
 		/* For now, just find any enemy that is in range and select that enemy as a target. */
 		target = game.getNextTarget(this);
+		if(target != null) target.setAttacker(this);
 	}
 	
 	public void debugRender(Graphics g)

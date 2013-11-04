@@ -72,6 +72,13 @@ public class Enemy {
 			this.y += dy * speed * (delta/1000.0);
 			
 			/* TODO: SIGNAL TOWER IF WE HAVE MOVED OUT OF RANGE */
+			if((attacker != null)){
+				System.out.println("here");
+				if (!Game.enemyInRange(attacker, this))
+				{
+					attacker.enemyOutOfRange(this);
+				}
+			}
 		}
 	}
 	
@@ -109,6 +116,11 @@ public class Enemy {
 	public float getRadius()
 	{
 		return radius;
+	}
+	
+	public void setAttacker(Tower t)
+	{
+		attacker = t;
 	}
 
 }

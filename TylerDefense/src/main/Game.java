@@ -100,7 +100,7 @@ public class Game extends BasicGame{
 		return false;
 	}
 	
-	private static boolean enemyInRange(Tower t, Enemy e)
+	public static boolean enemyInRange(Tower t, Enemy e)
 	{
 		return circlesCollide(t.x, t.y, t.radius, e.getX(), e.getY(), e.getRadius());
 	}
