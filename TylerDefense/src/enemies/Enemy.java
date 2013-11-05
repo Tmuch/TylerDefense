@@ -32,8 +32,9 @@ public class Enemy {
 		radius = 5;
 		switchedWaypoints = true;
 		targetWaypoint = first;
-		speed = 100;
+		speed = 20;
 		game = g;
+		health = 100;
 		attackers = new ArrayList<Tower>();
 	}
 	
@@ -101,7 +102,16 @@ public class Enemy {
 	
 	public void doDamage(int damage)
 	{
-		
+		health -= damage;
+		if(health <= 0)
+		{
+			//dead
+			for(Tower t : attackers)
+			{
+				t.targetDead(this);
+				game.removeEnemy(this);
+			}
+		}
 	}
 	
 	public void destroy()

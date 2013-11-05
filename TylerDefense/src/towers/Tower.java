@@ -40,8 +40,18 @@ public class Tower {
 		if(target == null) retarget();
 		else {
 			//shoot if we can based on fireRate
-			System.out.println("shoot");
+			ms += delta;
+			if(ms >= fireRate) {
+				System.out.println("shoot");
+				target.doDamage(damage);
+				ms = 0;
+			}
 		}
+	}
+	
+	public void targetDead(Enemy e)
+	{
+		outOfRange(e);
 	}
 	
 	public void outOfRange(Enemy e)
