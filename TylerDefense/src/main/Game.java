@@ -59,6 +59,9 @@ public class Game extends BasicGame{
 		
 		map = new Map();
 		enemies.add(new Enemy(0, 400, map.getInitWaypoint(), this));
+		enemies.add(new Enemy(-100, 400, map.getInitWaypoint(), this));
+		enemies.add(new Enemy(-200, 400, map.getInitWaypoint(), this));
+		enemies.add(new Enemy(-300, 400, map.getInitWaypoint(), this));
 		towers.add(new Tower(this, 400, 400));
 		towers.add(new Tower(this, 450, 400));
 	}

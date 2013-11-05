@@ -31,12 +31,12 @@ public class Enemy {
 	{
 		this.x = x;
 		this.y = y;
-		radius = 5;
+		radius = 8;
 		switchedWaypoints = true;
 		targetWaypoint = first;
 		speed = 20;
 		game = g;
-		initHealth = health = 100;
+		initHealth = health = 200;
 		attackers = new ArrayList<Tower>();
 	}
 	
@@ -44,9 +44,9 @@ public class Enemy {
 	{
 		g.drawOval(x - radius, y - radius, radius*2, radius*2);
 		float xCenter = this.x;
-		float yTop = this.y - 13;
+		float yTop = this.y - radius - 10;
 		float height = 5;
-		float width = 25;
+		float width = 35;
 		Color c = g.getColor();
 		g.setColor(Color.green);
 		g.fillRect(xCenter - width/2, yTop, width * (health / (float)initHealth), height);
