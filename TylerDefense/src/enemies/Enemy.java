@@ -1,5 +1,7 @@
 package enemies;
 
+import java.util.ArrayList;
+
 import main.Game;
 import map.Waypoint;
 
@@ -19,7 +21,7 @@ public class Enemy {
 	private int health;
 	public Game game;
 	
-	Tower attacker;
+	public ArrayList<Tower> attackers;
 	
 	private int id;
 	
@@ -32,6 +34,7 @@ public class Enemy {
 		targetWaypoint = first;
 		speed = 100;
 		game = g;
+		attackers = new ArrayList<Tower>();
 	}
 	
 	public void render(Graphics g)
@@ -61,6 +64,7 @@ public class Enemy {
 			
 		} else {	
 			
+			//if the enemy has reached it's next waypoint
 			if(Game.circlesCollide(this.x, this.y, 1, this.targetWaypoint.getX(), this.targetWaypoint.getY(), 1))
 			{
 				switchedWaypoints = true;
@@ -71,31 +75,37 @@ public class Enemy {
 			this.x += dx * speed * (delta/1000.0);
 			this.y += dy * speed * (delta/1000.0);
 			
-			/* TODO: SIGNAL TOWER IF WE HAVE MOVED OUT OF RANGE */
-			if((attacker != null)){
-				System.out.println("here");
-				if (!Game.enemyInRange(attacker, this))
+			/*
+			 * Determine if we have moved out of range of any towers and alert those towers.
+			 */
+			
+			int size = attackers.size();
+			for(int i = 0; i < size; i++)
+			{
+				if(!Game.enemyInRange(attackers.get(i), this))
 				{
-					attacker.enemyOutOfRange(this);
+					attackers.get(i).outOfRange(this);
+					attackers.remove(i);
+					i--;
+					size--;
 				}
 			}
+			
 		}
+	}
+	
+	public void addAttacker(Tower t)
+	{
+		attackers.add(t);
 	}
 	
 	public void doDamage(int damage)
 	{
-		health -= damage;
-		if(health <= 0)
-		{
-			//dead
-			attacker.enemyHasDied(this); //signal tower to re-target
-			this.destroy();
-		}
+		
 	}
 	
 	public void destroy()
 	{
-		game.removeEnemy(this);
 	}
 	
 	public int getID()
@@ -116,11 +126,6 @@ public class Enemy {
 	public float getRadius()
 	{
 		return radius;
-	}
-	
-	public void setAttacker(Tower t)
-	{
-		attacker = t;
 	}
 
 }

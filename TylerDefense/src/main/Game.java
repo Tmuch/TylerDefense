@@ -18,10 +18,9 @@ public class Game extends BasicGame{
 	String text = "";
 	
 	Map map;
-	Enemy e;
 	
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	Tower tower;
+	ArrayList<Tower> towers = new ArrayList<Tower>();
 
 	public Game(String title) 
 	{
@@ -39,8 +38,14 @@ public class Game extends BasicGame{
 			w = w.getNext();
 		}
 		
-		e.render(g);
-		tower.debugRender(g);
+		for(Enemy e : enemies)
+		{
+			e.render(g);
+		}
+		for(Tower t : towers)
+		{
+			t.debugRender(g);
+		}
 		
 	}
 
@@ -53,9 +58,9 @@ public class Game extends BasicGame{
 		//gc.setMaximumLogicUpdateInterval(20); //set a maximum?
 		
 		map = new Map();
-		e = new Enemy(0, 400, map.getInitWaypoint(), this);
-		enemies.add(e);
-		tower = new Tower(this, 400, 400);
+		enemies.add(new Enemy(0, 400, map.getInitWaypoint(), this));
+		towers.add(new Tower(this, 400, 400));
+		towers.add(new Tower(this, 450, 400));
 	}
 
 	/*
@@ -67,9 +72,15 @@ public class Game extends BasicGame{
 	 */
 	public void update(GameContainer gc, int delta) throws SlickException 
 	{
-		e.update(delta);
-		tower.shoot(delta);
-		
+		for(Enemy e : enemies)
+		{
+			e.update(delta);
+		}
+		//tower.shoot(delta);
+		for(Tower t : towers)
+		{
+			t.shoot(delta);
+		}
 	}
 	
 	public static void main(String[] args)

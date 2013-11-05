@@ -32,45 +32,29 @@ public class Tower {
 		ms = fireRate; //we can fire right away
 	}
 	
-	/*
-	 * If the enemy dies, it will signal the tower that it has died and to re-target.
-	 * 
-	 */
-	public void enemyHasDied(Enemy e)
-	{
-		if(e.getID() == target.getID())
-		{
-			this.retarget();
-		}
-	}
-	
 	public void shoot(int delta)
 	{
-		if(target == null)
-		{
-			this.retarget(); //get a new target
-		} else {
-			//we have a target
-			ms += delta;
-			if(ms >= fireRate)
-			{
-				
-				ms = 0;
-			}
+		/*
+		 * If we don't have an enemy to shoot at, get one.
+		 */
+		if(target == null) retarget();
+		else {
+			//shoot if we can based on fireRate
+			System.out.println("shoot");
 		}
 	}
 	
-	public void enemyOutOfRange(Enemy e)
+	public void outOfRange(Enemy e)
 	{
-		System.out.println("signaled");
-		enemyHasDied(e);
+		//TODO:check if e == target
+		target = null;
 	}
 	
 	private void retarget()
 	{
 		/* For now, just find any enemy that is in range and select that enemy as a target. */
 		target = game.getNextTarget(this);
-		if(target != null) target.setAttacker(this);
+		if(target != null) target.addAttacker(this);
 	}
 	
 	public void debugRender(Graphics g)
@@ -80,6 +64,11 @@ public class Tower {
 		else g.setColor(Color.green);
 		g.drawOval(this.x - radius, this.y - radius, radius*2, radius*2);
 		g.setColor(c);
+	}
+	
+	public boolean hasTarget()
+	{
+		return target != null;
 	}
 
 }
