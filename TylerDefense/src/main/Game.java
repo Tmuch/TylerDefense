@@ -3,6 +3,8 @@ package main;
 import java.util.ArrayList;
 
 import map.*;
+import input.*;
+import input.Input;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -18,6 +20,7 @@ public class Game extends BasicGame{
 	String text = "";
 	
 	Map map;
+	Input input;
 	
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	ArrayList<Tower> towers = new ArrayList<Tower>();
@@ -47,6 +50,8 @@ public class Game extends BasicGame{
 			t.debugRender(g);
 		}
 		
+		g.drawString("(" + Mouse.getX() + ", " + Mouse.getY() + ")", 100, 10);
+		
 	}
 
 	public void init(GameContainer gc) throws SlickException 
@@ -57,11 +62,14 @@ public class Game extends BasicGame{
 		//gc.setMinimumLogicUpdateInterval(20); //maximum 50 updates per second
 		//gc.setMaximumLogicUpdateInterval(20); //set a maximum?
 		
+		input = new Input();
+		
 		map = new Map();
 		enemies.add(new Enemy(0, 400, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-100, 400, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-200, 400, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-300, 400, map.getInitWaypoint(), this));
+		
 		towers.add(new Tower(this, 400, 400));
 		towers.add(new Tower(this, 450, 400));
 	}
@@ -82,6 +90,18 @@ public class Game extends BasicGame{
 		for(Tower t : towers)
 		{
 			t.shoot(delta);
+		}
+		
+		input();
+		
+	}
+	
+	private void input()
+	{
+		input.update();
+		if(input.getMouseDown(0))
+		{
+			//place tower
 		}
 	}
 	
