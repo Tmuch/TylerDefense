@@ -8,7 +8,9 @@ import input.Input;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Point;
 
 import towers.Tower;
 import enemies.Enemy;
@@ -24,6 +26,8 @@ public class Game extends BasicGame{
 	
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	ArrayList<Tower> towers = new ArrayList<Tower>();
+	
+	ArrayList<Point> towerPoints = new ArrayList<Point>();
 
 	public Game(String title) 
 	{
@@ -51,6 +55,11 @@ public class Game extends BasicGame{
 		}
 		
 		g.drawString("(" + Mouse.getX() + ", " + Mouse.getY() + ")", 100, 10);
+		
+		for(Point p : towerPoints)
+		{
+			g.drawRect(p.getX(), p.getY(), 5, 5);
+		}
 		
 	}
 
@@ -102,6 +111,18 @@ public class Game extends BasicGame{
 		if(input.getMouseDown(0))
 		{
 			//place tower
+			int x = (input.getX() / 20) * 20;
+			if((input.getX() % 20) >= 10)
+			{
+				x += 20;
+			}
+			
+			int y = (input.getY() / 20) * 20;
+			if((input.getY() % 20) >= 10)
+			{
+				y += 20;
+			}
+			towerPoints.add(new Point(x, Display.getHeight() - y));
 		}
 	}
 	

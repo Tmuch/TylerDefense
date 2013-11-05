@@ -62,6 +62,16 @@ public class Input {
 		return upMouse.contains(mouseButton);
 	}
 	
+	public int getX()
+	{
+		return Mouse.getX();
+	}
+	
+	public int getY()
+	{
+		return Mouse.getY();
+	}
+	
 	public void grabMouse()
 	{
 		if(mouseIsGrabbed()) return;
