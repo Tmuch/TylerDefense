@@ -76,7 +76,6 @@ public class Game extends BasicGame{
 		{
 			e.update(delta);
 		}
-		//tower.shoot(delta);
 		for(Tower t : towers)
 		{
 			t.shoot(delta);

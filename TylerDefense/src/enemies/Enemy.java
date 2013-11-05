@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import main.Game;
 import map.Waypoint;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import towers.Tower;
@@ -17,6 +18,7 @@ public class Enemy {
 	private boolean switchedWaypoints;
 	private float dx, dy;
 	private float speed;
+	private final int initHealth;
 	
 	private int health;
 	public Game game;
@@ -34,13 +36,23 @@ public class Enemy {
 		targetWaypoint = first;
 		speed = 20;
 		game = g;
-		health = 100;
+		initHealth = health = 100;
 		attackers = new ArrayList<Tower>();
 	}
 	
 	public void render(Graphics g)
 	{
 		g.drawOval(x - radius, y - radius, radius*2, radius*2);
+		float xCenter = this.x;
+		float yTop = this.y - 13;
+		float height = 5;
+		float width = 25;
+		Color c = g.getColor();
+		g.setColor(Color.green);
+		g.fillRect(xCenter - width/2, yTop, width * (health / (float)initHealth), height);
+		g.setColor(Color.red);
+		g.fillRect(xCenter - width/2 + width * (health / (float)initHealth), yTop, width - (width * (health / (float)initHealth)), height);
+		g.setColor(c);
 	}
 	
 	public void update(int delta)
