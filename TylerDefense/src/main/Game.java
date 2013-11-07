@@ -1,6 +1,8 @@
 package main;
 
 import java.util.ArrayList;
+
+import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.util.Log;
 
 import map.*;
@@ -20,6 +22,8 @@ public class Game extends BasicGame{
 	private final int RIGHT_PANEL_WIDTH = 150;
 	private final int BOTTOM_PANEL_HEIGHT = 50;
 	private int wave;
+	
+	Texture levelBackground;
 	
 	String text = "";
 	
