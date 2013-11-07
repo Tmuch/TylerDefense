@@ -125,7 +125,13 @@ public class Game extends BasicGame{
 		Log.info("Level screen: " + (Display.getWidth() - RIGHT_PANEL_WIDTH) + " x " + (Display.getHeight() - BOTTOM_PANEL_HEIGHT));
 		
 		
-		button = new Button(Display.getWidth()/2 - 75, Display.getHeight()/2 - 25, 150, 50, Color.red, Color.white, "Play");
+		try {
+			button = new Button(new Image(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/buttons/play_button.png"))), 150, 150);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 		//towers.add(new Tower(this, 400, 400));
 		//towers.add(new Tower(this, 450, 400));

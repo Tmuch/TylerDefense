@@ -30,6 +30,10 @@ public class Button {
 		image = i;
 		this.x = x;
 		this.y = y;
+		bgColor = fgColor = null;
+		text = null;
+		width = image.getWidth();
+		height = image.getHeight();
 	}
 	
 	public void draw(Graphics g)
