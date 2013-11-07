@@ -21,6 +21,8 @@ public class Tower {
 	public Game game;
 	public int ms;
 	
+	public int totalKills;
+	
 	public Tower(Game g, int x, int y)
 	{
 		game = g;
@@ -30,6 +32,7 @@ public class Tower {
 		fireRate = 500;
 		radius = 50;
 		ms = fireRate; //we can fire right away
+		totalKills = 0;
 	}
 	
 	public void shoot(int delta)
@@ -42,7 +45,7 @@ public class Tower {
 			//shoot if we can based on fireRate
 			ms += delta;
 			if(ms >= fireRate) {
-				System.out.println("shoot");
+				//System.out.println("shoot");
 				target.doDamage(damage);
 				ms = 0;
 			}

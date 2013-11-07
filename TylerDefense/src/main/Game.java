@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import org.newdawn.slick.util.Log;
 
 import map.*;
 import input.*;
@@ -16,8 +17,12 @@ import towers.Tower;
 import enemies.Enemy;
 
 public class Game extends BasicGame{
+	private Log LOGGER;
 	private final int UPS = 60; //updates per second
 	private final int MS_PER_UPDATE = (int)Math.ceil(1000D / UPS);
+	private final int LEFT_PANEL_WIDTH = 150;
+	private final int BOTTOM_PANEL_HEIGHT = 50;
+	private int wave;
 	
 	String text = "";
 	
@@ -27,40 +32,48 @@ public class Game extends BasicGame{
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	ArrayList<Tower> towers = new ArrayList<Tower>();
 	
-	ArrayList<Point> towerPoints = new ArrayList<Point>();
+	enum GameState {
+		INIT, STARTED, STOPPED, PAUSED, BETWEEN_WAVES, DURING_WAVE 
+	}
+	GameState state;
 
-	public Game(String title) 
+	public Game(String title)
 	{
 		super(title);
+		state = GameState.INIT;
 	}
 
 	public void render(GameContainer gc, Graphics g) throws SlickException 
-	{
-		g.drawString(text, gc.getWidth()/2 - g.getFont().getWidth(text)/2, gc.getHeight()/2 - g.getFont().getHeight(text)/2);
-		
+	{	
 		Waypoint w = map.getInitWaypoint();
-		while(!(w == null))
+		
+		/* Draw Waypoints */
+		while(w != null)
 		{
 			g.fillOval(w.getX() - 1.5f, w.getY() - 1.5f, 3, 3);
 			w = w.getNext();
 		}
 		
+		/* Draw Enemies */
 		for(Enemy e : enemies)
 		{
 			e.render(g);
 		}
+		
+		/* Draw Towers */
 		for(Tower t : towers)
 		{
 			t.debugRender(g);
 		}
 		
+		/* Draw Mouse Position */
 		g.drawString("(" + Mouse.getX() + ", " + Mouse.getY() + ")", 100, 10);
 		
-		for(Point p : towerPoints)
-		{
-			g.drawRect(p.getX(), p.getY(), 5, 5);
-		}
+		/* TESTING */
+		g.drawRect(Display.getWidth() - LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, Display.getHeight());
+		g.drawRect(0, Display.getHeight() - BOTTOM_PANEL_HEIGHT, Display.getWidth(), BOTTOM_PANEL_HEIGHT);
 		
+		if(state == GameState.PAUSED) g.drawString("Paused", 10, Display.getHeight() - 20);
 	}
 
 	public void init(GameContainer gc) throws SlickException 
@@ -81,6 +94,7 @@ public class Game extends BasicGame{
 		
 		//towers.add(new Tower(this, 400, 400));
 		//towers.add(new Tower(this, 450, 400));
+		changeState(GameState.STARTED);
 	}
 
 	/*
@@ -92,13 +106,28 @@ public class Game extends BasicGame{
 	 */
 	public void update(GameContainer gc, int delta) throws SlickException 
 	{
-		for(Enemy e : enemies)
+		switch(state)
 		{
-			e.update(delta);
-		}
-		for(Tower t : towers)
-		{
-			t.shoot(delta);
+		case DURING_WAVE:
+			if(enemies.isEmpty()) {
+				changeState(GameState.BETWEEN_WAVES);
+				break;
+			} else {
+				for(Enemy e : enemies)
+				{
+					e.update(delta);
+				}
+				for(Tower t : towers)
+				{
+					t.shoot(delta);
+				}
+			}
+			break;
+		case PAUSED:
+			//do nothing for now
+			break;
+		case BETWEEN_WAVES:
+			break;
 		}
 		
 		input();
@@ -110,23 +139,25 @@ public class Game extends BasicGame{
 		input.update();
 		if(input.getMouseDown(0))
 		{
-			//place tower
-			int x = (input.getX() / 20) * 20;
-			if((input.getX() % 20) >= 10)
-			{
-				x += 20;
-			}
-			
-			int y = (input.getY() / 20) * 20;
-			if((input.getY() % 20) >= 10)
-			{
-				y += 20;
-			}
-			//towerPoints.add(new Point(x, Display.getHeight() - y));
-			
-			towers.add(new Tower(this, x, Display.getHeight() - y));
+			if(state == GameState.BETWEEN_WAVES || (state == GameState.STARTED))
+				placeTower(input.getX(), input.getY());
+		}
+		
+		if(input.getKeyDown(Keyboard.KEY_ESCAPE))
+		{
+			if(state == GameState.DURING_WAVE)
+				changeState(GameState.PAUSED);
+			else if(state == GameState.PAUSED)
+				changeState(GameState.DURING_WAVE);
+		}
+		if(input.getKeyDown(Keyboard.KEY_SPACE))
+		{
+			if(state == GameState.STARTED)
+				changeState(GameState.DURING_WAVE);
 		}
 	}
+	
+	
 	
 	public static void main(String[] args)
 	{
@@ -182,6 +213,39 @@ public class Game extends BasicGame{
 	public void removeEnemy(Enemy e)
 	{
 		enemies.remove(e);
+	}
+	
+	private void placeTower(int x, int y)
+	{
+		int xx = (x / 20) * 20; //round down to nearest multiple of 20
+		int yy = (y / 20) * 20;
+		if((x % 20) >= 10)
+		{
+			xx += 20;
+		}
+		if((y % 20) >= 10)
+		{
+			yy += 20;
+		}
+		
+		yy = Display.getHeight() - yy;
+		
+		for(Tower t : towers)
+		{
+			if((t.x == xx) && (t.y == yy)) {
+				LOGGER.warn("Already a tower there!");
+				return;
+			}
+		}
+		towers.add(new Tower(this, xx, yy));
+		LOGGER.info("Added tower at (" + xx + ", " + yy + ")");
+		
+	}
+	
+	private void changeState(GameState next)
+	{
+		LOGGER.info("Game State: " + state + " -> " + next);
+		state = next;
 	}
 
 }
