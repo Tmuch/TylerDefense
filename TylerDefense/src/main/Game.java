@@ -54,10 +54,20 @@ public class Game extends BasicGame{
 	{	
 		switch(state)
 		{
+		case INIT:
+			break;
+		case STOPPED:
+			break;
+		case PAUSED:
+			break;
 		case MENU:
 			button.draw(g);
 			break;
-		default:
+		case BETWEEN_WAVES:
+			
+		case DURING_WAVE:
+			
+		case STARTED:
 			/* Draw background */
 			if(levelBackground != null)
 			{
@@ -115,7 +125,7 @@ public class Game extends BasicGame{
 		Log.info("Level screen: " + (Display.getWidth() - RIGHT_PANEL_WIDTH) + " x " + (Display.getHeight() - BOTTOM_PANEL_HEIGHT));
 		
 		
-		button = new Button(150, 150, 150, 50, Color.red, Color.white, "Play");
+		button = new Button(Display.getWidth()/2 - 75, Display.getHeight()/2 - 25, 150, 50, Color.red, Color.white, "Play");
 		
 		//towers.add(new Tower(this, 400, 400));
 		//towers.add(new Tower(this, 450, 400));
@@ -129,10 +139,22 @@ public class Game extends BasicGame{
 	 * 		delta value. This allows avoiding needing to change game logic based on the power 
 	 * 		of the hardware. 
 	 */
-	public void update(GameContainer gc, int delta) throws SlickException 
+	public void update(GameContainer gc, int delta) throws SlickException
 	{
+		//	INIT, STARTED, STOPPED, PAUSED, BETWEEN_WAVES, DURING_WAVE, MENU
 		switch(state)
 		{
+		case INIT:
+			break;
+		case STARTED:
+			break;
+		case STOPPED:
+			break;
+		case PAUSED:
+			// do nothing
+			break;
+		case BETWEEN_WAVES:
+			break;
 		case DURING_WAVE:
 			if(enemies.isEmpty()) {
 				changeState(GameState.BETWEEN_WAVES);
@@ -157,10 +179,7 @@ public class Game extends BasicGame{
 				}
 			}
 			break;
-		case PAUSED:
-			//do nothing for now
-			break;
-		case BETWEEN_WAVES:
+		case MENU:
 			break;
 		}
 		
@@ -175,6 +194,10 @@ public class Game extends BasicGame{
 		{
 			if(state == GameState.BETWEEN_WAVES || (state == GameState.STARTED))
 				placeTower(input.getX(), input.getY());
+			
+			/*
+			 * "Play" button on main menu
+			 */
 			if(state == GameState.MENU) {
 				if(button.pointInBounds(Mouse.getX(), Display.getHeight() - Mouse.getY())) {
 					changeState(GameState.STARTED);
