@@ -31,7 +31,6 @@ public class Game extends BasicGame{
 	String text = "";
 	
 	Map map;
-	//test
 	Input input;
 	
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
