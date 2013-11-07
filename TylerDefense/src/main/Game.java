@@ -1,9 +1,12 @@
 package main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.Log;
+import org.newdawn.slick.util.ResourceLoader;
 
 import map.*;
 import input.Input;
@@ -23,7 +26,7 @@ public class Game extends BasicGame{
 	private final int BOTTOM_PANEL_HEIGHT = 50;
 	private int wave;
 	
-	Texture levelBackground;
+	Image levelBackground;
 	
 	String text = "";
 	
@@ -46,6 +49,13 @@ public class Game extends BasicGame{
 
 	public void render(GameContainer gc, Graphics g) throws SlickException 
 	{	
+		/* Draw background */
+		if(levelBackground != null)
+		{
+			levelBackground.draw();
+		}
+		
+		
 		Waypoint w = map.getInitWaypoint();
 		
 		/* Draw Waypoints */
@@ -93,6 +103,14 @@ public class Game extends BasicGame{
 		enemies.add(new Enemy(-100, 400, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-200, 400, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-300, 400, map.getInitWaypoint(), this));
+		
+		
+		try {
+			levelBackground = new Image(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/backgrounds/test_level.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		/* PRINTING GAME INFO */
 		Log.info("Level screen: " + (Display.getWidth() - RIGHT_PANEL_WIDTH) + " x " + (Display.getHeight() - BOTTOM_PANEL_HEIGHT));
