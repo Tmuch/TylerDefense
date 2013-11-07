@@ -36,7 +36,7 @@ public class Enemy {
 		targetWaypoint = first;
 		speed = 20;
 		game = g;
-		initHealth = health = 200;
+		initHealth = health = 400;
 		attackers = new ArrayList<Tower>();
 	}
 	

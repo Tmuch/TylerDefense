@@ -11,7 +11,7 @@ public class Map {
 	
 	private void initWaypoints()
 	{
-		/*
+		
 		Waypoint w1 = new Waypoint(100, 100, false);
 		Waypoint w2 = new Waypoint(100, 200, false);
 		Waypoint w3 = new Waypoint(200, 200, false);
@@ -24,9 +24,9 @@ public class Map {
 		w2.setNext(w3);
 		w3.setNext(w4);
 		w4.setNext(w5);
-		w5.setNext(w6);*/
+		w5.setNext(w6);
 		
-		initWaypoint = new Waypoint(600, 400, true);
+		//initWaypoint = new Waypoint(600, 400, true);
 		
 	}
 	
