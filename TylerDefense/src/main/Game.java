@@ -59,11 +59,11 @@ public class Game extends BasicGame{
 		Waypoint w = map.getInitWaypoint();
 		
 		/* Draw Waypoints */
-		while(w != null)
+		/*while(w != null)
 		{
 			g.fillOval(w.getX() - 1.5f, w.getY() - 1.5f, 3, 3);
 			w = w.getNext();
-		}
+		}*/
 		
 		/* Draw Enemies */
 		for(Enemy e : enemies)
@@ -99,10 +99,10 @@ public class Game extends BasicGame{
 		input = new Input();
 		
 		map = new Map();
-		enemies.add(new Enemy(0, 400, map.getInitWaypoint(), this));
-		enemies.add(new Enemy(-100, 400, map.getInitWaypoint(), this));
-		enemies.add(new Enemy(-200, 400, map.getInitWaypoint(), this));
-		enemies.add(new Enemy(-300, 400, map.getInitWaypoint(), this));
+		enemies.add(new Enemy(0, 125, map.getInitWaypoint(), this));
+		enemies.add(new Enemy(-100, 125, map.getInitWaypoint(), this));
+		enemies.add(new Enemy(-200, 125, map.getInitWaypoint(), this));
+		enemies.add(new Enemy(-300, 125, map.getInitWaypoint(), this));
 		
 		
 		try {
@@ -140,6 +140,15 @@ public class Game extends BasicGame{
 				for(Enemy e : enemies)
 				{
 					e.update(delta);
+				}
+				for(int size = enemies.size(), i = 0; i < size; i++)
+				{
+					if(enemies.get(i).finished) {
+						removeEnemy(enemies.get(i));
+						size--;
+						i--;
+						Log.info("Enemy reached the end of the path!");
+					}
 				}
 				for(Tower t : towers)
 				{

@@ -24,6 +24,7 @@ public class Enemy {
 	public Game game;
 	
 	public ArrayList<Tower> attackers;
+	public boolean finished;
 	
 	private int id;
 	
@@ -34,20 +35,22 @@ public class Enemy {
 		radius = 8;
 		switchedWaypoints = true;
 		targetWaypoint = first;
-		speed = 20;
+		speed = 200;
 		game = g;
 		initHealth = health = 400;
 		attackers = new ArrayList<Tower>();
+		finished = false;
 	}
 	
 	public void render(Graphics g)
 	{
+		Color c = g.getColor();
+		g.setColor(Color.black);
 		g.drawOval(x - radius, y - radius, radius*2, radius*2);
 		float xCenter = this.x;
 		float yTop = this.y - radius - 10;
 		float height = 5;
 		float width = 35;
-		Color c = g.getColor();
 		g.setColor(Color.green);
 		g.fillRect(xCenter - width/2, yTop, width * (health / (float)initHealth), height);
 		g.setColor(Color.red);
@@ -61,6 +64,7 @@ public class Enemy {
 		{
 			if(targetWaypoint == null) {
 				//done
+				finished = true;
 				return;
 			} else {
 				//recalculate dx and dy
@@ -121,8 +125,8 @@ public class Enemy {
 			for(Tower t : attackers)
 			{
 				t.targetDead(this);
-				game.removeEnemy(this);
 			}
+			game.removeEnemy(this);
 		}
 	}
 	
