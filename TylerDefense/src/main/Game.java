@@ -17,6 +17,7 @@ import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
 
 import towers.Tower;
+import util.Button;
 import enemies.Enemy;
 
 public class Game extends BasicGame{
@@ -36,8 +37,10 @@ public class Game extends BasicGame{
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	ArrayList<Tower> towers = new ArrayList<Tower>();
 	
+	Button button;
+	
 	enum GameState {
-		INIT, STARTED, STOPPED, PAUSED, BETWEEN_WAVES, DURING_WAVE 
+		INIT, STARTED, STOPPED, PAUSED, BETWEEN_WAVES, DURING_WAVE, MENU
 	}
 	GameState state;
 
@@ -49,40 +52,37 @@ public class Game extends BasicGame{
 
 	public void render(GameContainer gc, Graphics g) throws SlickException 
 	{	
-		/* Draw background */
-		if(levelBackground != null)
+		switch(state)
 		{
-			levelBackground.draw();
+		case MENU:
+			button.draw(g);
+			break;
+		default:
+			/* Draw background */
+			if(levelBackground != null)
+			{
+				levelBackground.draw();
+			}
+			
+			/* Draw Enemies */
+			for(Enemy e : enemies)
+			{
+				e.render(g);
+			}
+			
+			/* Draw Towers */
+			for(Tower t : towers)
+			{
+				t.debugRender(g);
+			}
+			
+			/* Draw Mouse Position */
+			g.drawString("(" + Mouse.getX() + ", " + Mouse.getY() + ")", 100, 10);
+			
+			/* TESTING */
+			g.drawRect(Display.getWidth() - RIGHT_PANEL_WIDTH, 0, RIGHT_PANEL_WIDTH, Display.getHeight());
+			g.drawRect(0, Display.getHeight() - BOTTOM_PANEL_HEIGHT, Display.getWidth(), BOTTOM_PANEL_HEIGHT);
 		}
-		
-		
-		Waypoint w = map.getInitWaypoint();
-		
-		/* Draw Waypoints */
-		/*while(w != null)
-		{
-			g.fillOval(w.getX() - 1.5f, w.getY() - 1.5f, 3, 3);
-			w = w.getNext();
-		}*/
-		
-		/* Draw Enemies */
-		for(Enemy e : enemies)
-		{
-			e.render(g);
-		}
-		
-		/* Draw Towers */
-		for(Tower t : towers)
-		{
-			t.debugRender(g);
-		}
-		
-		/* Draw Mouse Position */
-		g.drawString("(" + Mouse.getX() + ", " + Mouse.getY() + ")", 100, 10);
-		
-		/* TESTING */
-		g.drawRect(Display.getWidth() - RIGHT_PANEL_WIDTH, 0, RIGHT_PANEL_WIDTH, Display.getHeight());
-		g.drawRect(0, Display.getHeight() - BOTTOM_PANEL_HEIGHT, Display.getWidth(), BOTTOM_PANEL_HEIGHT);
 		
 		if(state == GameState.PAUSED) g.drawString("Paused", 10, Display.getHeight() - 20);
 	}
@@ -104,7 +104,6 @@ public class Game extends BasicGame{
 		enemies.add(new Enemy(-200, 125, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-300, 125, map.getInitWaypoint(), this));
 		
-		
 		try {
 			levelBackground = new Image(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/backgrounds/test_level.png")));
 		} catch (IOException e) {
@@ -116,9 +115,11 @@ public class Game extends BasicGame{
 		Log.info("Level screen: " + (Display.getWidth() - RIGHT_PANEL_WIDTH) + " x " + (Display.getHeight() - BOTTOM_PANEL_HEIGHT));
 		
 		
+		button = new Button(150, 150, 150, 50, Color.red, Color.white, "Play");
+		
 		//towers.add(new Tower(this, 400, 400));
 		//towers.add(new Tower(this, 450, 400));
-		changeState(GameState.STARTED);
+		changeState(GameState.MENU);
 	}
 
 	/*
@@ -174,6 +175,11 @@ public class Game extends BasicGame{
 		{
 			if(state == GameState.BETWEEN_WAVES || (state == GameState.STARTED))
 				placeTower(input.getX(), input.getY());
+			if(state == GameState.MENU) {
+				if(button.pointInBounds(Mouse.getX(), Display.getHeight() - Mouse.getY())) {
+					changeState(GameState.STARTED);
+				}
+			}
 		}
 		
 		if(input.getKeyDown(Keyboard.KEY_ESCAPE))
