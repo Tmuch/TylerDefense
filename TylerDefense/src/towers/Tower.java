@@ -2,6 +2,7 @@ package towers;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.util.Log;
 
 import main.Game;
 import enemies.Enemy;

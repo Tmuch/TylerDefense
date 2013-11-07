@@ -4,23 +4,20 @@ import java.util.ArrayList;
 import org.newdawn.slick.util.Log;
 
 import map.*;
-import input.*;
 import input.Input;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Point;
 
 import towers.Tower;
 import enemies.Enemy;
 
 public class Game extends BasicGame{
-	private Log LOGGER;
 	private final int UPS = 60; //updates per second
 	private final int MS_PER_UPDATE = (int)Math.ceil(1000D / UPS);
-	private final int LEFT_PANEL_WIDTH = 150;
+	private final int RIGHT_PANEL_WIDTH = 150;
 	private final int BOTTOM_PANEL_HEIGHT = 50;
 	private int wave;
 	
@@ -70,7 +67,7 @@ public class Game extends BasicGame{
 		g.drawString("(" + Mouse.getX() + ", " + Mouse.getY() + ")", 100, 10);
 		
 		/* TESTING */
-		g.drawRect(Display.getWidth() - LEFT_PANEL_WIDTH, 0, LEFT_PANEL_WIDTH, Display.getHeight());
+		g.drawRect(Display.getWidth() - RIGHT_PANEL_WIDTH, 0, RIGHT_PANEL_WIDTH, Display.getHeight());
 		g.drawRect(0, Display.getHeight() - BOTTOM_PANEL_HEIGHT, Display.getWidth(), BOTTOM_PANEL_HEIGHT);
 		
 		if(state == GameState.PAUSED) g.drawString("Paused", 10, Display.getHeight() - 20);
@@ -80,6 +77,7 @@ public class Game extends BasicGame{
 	{
 		gc.setShowFPS(true); //a handy fps counter
 		gc.setVSync(true);
+		gc.setAlwaysRender(true);
 		//don't mess with this stuff quite yet
 		//gc.setMinimumLogicUpdateInterval(20); //maximum 50 updates per second
 		//gc.setMaximumLogicUpdateInterval(20); //set a maximum?
@@ -91,6 +89,10 @@ public class Game extends BasicGame{
 		enemies.add(new Enemy(-100, 400, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-200, 400, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-300, 400, map.getInitWaypoint(), this));
+		
+		/* PRINTING GAME INFO */
+		Log.info("Level screen: " + (Display.getWidth() - RIGHT_PANEL_WIDTH) + " x " + (Display.getHeight() - BOTTOM_PANEL_HEIGHT));
+		
 		
 		//towers.add(new Tower(this, 400, 400));
 		//towers.add(new Tower(this, 450, 400));
@@ -233,18 +235,18 @@ public class Game extends BasicGame{
 		for(Tower t : towers)
 		{
 			if((t.x == xx) && (t.y == yy)) {
-				LOGGER.warn("Already a tower there!");
+				Log.warn("Already a tower there!");
 				return;
 			}
 		}
 		towers.add(new Tower(this, xx, yy));
-		LOGGER.info("Added tower at (" + xx + ", " + yy + ")");
+		Log.info("Added tower at (" + xx + ", " + yy + ")");
 		
 	}
 	
 	private void changeState(GameState next)
 	{
-		LOGGER.info("Game State: " + state + " -> " + next);
+		Log.info("Game State: " + state + " -> " + next);
 		state = next;
 	}
 
