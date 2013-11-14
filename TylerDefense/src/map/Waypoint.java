@@ -4,13 +4,11 @@ public class Waypoint {
 	
 	private float x, y;
 	private Waypoint nextWaypoint;
-	private boolean last;
 	
-	public Waypoint(int x, int y, boolean l)
+	public Waypoint(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
-		last = l;
 	}
 	
 	public void setNext(Waypoint w)

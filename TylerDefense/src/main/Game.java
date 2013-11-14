@@ -37,7 +37,7 @@ public class Game extends BasicGame{
 	ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	ArrayList<Tower> towers = new ArrayList<Tower>();
 	
-	Button button;
+	Button playButton;
 	
 	enum GameState {
 		INIT, STARTED, STOPPED, PAUSED, BETWEEN_WAVES, DURING_WAVE, MENU
@@ -61,7 +61,7 @@ public class Game extends BasicGame{
 		case PAUSED:
 			break;
 		case MENU:
-			button.draw(g);
+			playButton.draw(g);
 			break;
 		case BETWEEN_WAVES:
 			
@@ -108,14 +108,26 @@ public class Game extends BasicGame{
 		
 		input = new Input();
 		
-		map = new Map();
+		ArrayList<Waypoint> wps = new ArrayList<Waypoint>();
+		
+		wps.add(new Waypoint(300, 125));
+		wps.add(new Waypoint(300, 365));
+		wps.add(new Waypoint(667, 365));
+		wps.add(new Waypoint(667, 118));
+		wps.add(new Waypoint(1050, 118));
+		
+		map = new Map(wps);
 		enemies.add(new Enemy(0, 125, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-100, 125, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-200, 125, map.getInitWaypoint(), this));
 		enemies.add(new Enemy(-300, 125, map.getInitWaypoint(), this));
 		
+		/* Load all images */
 		try {
 			levelBackground = new Image(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/backgrounds/test_level.png")));
+			Image i = new Image(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/buttons/play_button.png")));
+			playButton = new Button(i, 
+					(Display.getWidth()/2) - (i.getWidth()/2), (Display.getHeight()/2) - (i.getHeight()/2));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,14 +135,6 @@ public class Game extends BasicGame{
 		
 		/* PRINTING GAME INFO */
 		Log.info("Level screen: " + (Display.getWidth() - RIGHT_PANEL_WIDTH) + " x " + (Display.getHeight() - BOTTOM_PANEL_HEIGHT));
-		
-		
-		try {
-			button = new Button(new Image(TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/buttons/play_button.png"))), 150, 150);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		
 		//towers.add(new Tower(this, 400, 400));
@@ -205,7 +209,7 @@ public class Game extends BasicGame{
 			 * "Play" button on main menu
 			 */
 			if(state == GameState.MENU) {
-				if(button.pointInBounds(Mouse.getX(), Display.getHeight() - Mouse.getY())) {
+				if(playButton.pointInBounds(Mouse.getX(), Display.getHeight() - Mouse.getY())) {
 					changeState(GameState.STARTED);
 				}
 			}
